@@ -9,6 +9,7 @@ gem 'better_errors'
 # gem 'dynamoid'
 gem 'aws-sdk-rails'
 gem 'jquery'
+gem 'mysql2'
 # gem 'paperclip'
 # gem 's3_direct_upload'
 
