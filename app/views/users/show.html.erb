@@ -51,7 +51,7 @@
 				<th>Size</th>
 				<th>Last Modified</th>
 			</tr>
-			<% @objects.each_with_index do |object, index| %>
+			<% @user_objects.each_with_index do |object, index| %>
 				<tr>
 					<td> 
 						<% key = object.key %>
@@ -59,7 +59,7 @@
 						<%= key %>
 					</td>
 					<td>
-						<%= @object_size[index] %>
+						<%= @user_object_size[index] %>
 					</td>
 					<td>
 						<%= object.last_modified.asctime %>
@@ -75,7 +75,7 @@
 			<% end %>
 		</table>
 </div>
-<%= @objects.length %> files
+<%= @user_objects.length %> files
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
