@@ -10,6 +10,10 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    if current_user.folder.nil?
+      current_user.folder = generate_random_user_user_folder_name
+      current_user.save
+    end
   end
 
   # GET /users/new
