@@ -14,11 +14,65 @@ class UsersController < ApplicationController
       current_user.folder = generate_random_user_user_folder_name
       current_user.save
     end
+    @user_bucket_resource = @s3r.bucket(@bucket_name)
+    @user_objects = @s3.list_objects(bucket: @bucket_name, prefix: current_user.folder).contents
+    user_object_name
   end
   def generate_random_user_user_folder_name()
     letters = [('a'..'z'),('A'..'Z')].map { |i| i.to_a }.flatten
     return (0..8).map{ letters[rand(letters.length)] }.join
   end
+
+  def user_object_name
+    object_name_list = []
+    i = 0
+    @user_objects.each_with_index do |obj, index|
+      key = obj.key
+      size = obj.size
+      object_name_list.insert(index, key)
+    end
+    object_data(object_name_list)
+  end
+  def object_data(object_name_list)
+    @total_size = 0
+    @total_size = cal_totalsize(@objects)
+    @total_size = cal_byte(@total_size)
+    @object_type = []
+    @object_link = []
+    @object_size = []
+    object_name_list.each_with_index do |name, index|
+      @object_type.insert(index, @user_bucket_resource.object(name).content_type)
+      @object_link.insert(index, @user_bucket_resource.object(name).public_url)
+      @object_size.insert(index, cal_byte(@user_bucket_resource.object(name).content_length))
+    end
+  end
+  def cal_totalsize(objects)
+    total_size = 0
+    @user_objects.each do |object|
+      total_size = total_size + object.size
+    end
+    return total_size
+  end
+  def cal_byte(size)
+    kb = 1024.00
+    mb = kb * 1024.00
+    if size < mb then
+      if size < kb then 
+        size = size.round(2)
+        return "#{size} byte"
+      else
+        size = size / kb
+        size = size.round(2)
+        return "#{size} kb"
+      end
+    else
+      size = size / mb
+      size = size.round(2)
+      return "#{size} mb"
+    end
+  end
+
+
 
   # GET /users/new
   def new
