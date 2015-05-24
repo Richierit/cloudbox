@@ -1,6 +1,18 @@
 source 'https://rubygems.org'
 
 
+
+gem 'devise'
+# gem 'aws-sdk'
+gem 'aws-sdk', '~> 2'
+gem 'better_errors'
+# gem 'dynamoid'
+gem 'aws-sdk-rails'
+gem 'jquery'
+# gem 'paperclip'
+# gem 's3_direct_upload'
+
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 # Use sqlite3 as the database for Active Record
