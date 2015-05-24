@@ -1,4 +1,81 @@
 <p id="notice"><%= notice %></p>
 
+
+<h1><b>Your Email: </b><%=current_user.email%></h1>
+<div>
+	<h1> <%= @total_size %> <b> UPLOADED </b> </h1>
+</div>
+
+<table class="table">
+<thead>
+<tr><th>Folder</th></tr>
+</thead>
+<tbody>
+<tr>
+  	<td><%= current_user.folder%></td>
+</tr>
+</tbody>
+</table>
+
+<div class="panel panel-default">
+	<div class="panel-heading">Upload to Bucket</div>
+		<form action="http://mymegaawesomedropbox.s3.amazonaws.com/" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="key" value="<%= current_user.folder %>/${filename}" />
+			<input type="hidden" name="acl" value="public-read" />
+			<input type="hidden" name="success_action_redirect" value="http://localhost:3000/">
+			<input type="hidden" name="AWSAccessKeyId" value="AKIAIFFT5S5ZREAOMKOQ" />
+			<input type="hidden" name="policy" value="ewogICJleHBpcmF0aW9uIjogIjIwMjAtMDEtMDFUMTI6MDA6MDAuMDAwWiIsCiAgImNvbmRpdGlvbnMiOiBbCiAgICB7ImJ1Y2tldCI6ICJteW1lZ2Fhd2Vzb21lZHJvcGJveCIgfSwKICAgIHsiYWNsIjogInB1YmxpYy1yZWFkIiB9LAogICAgWyJzdGFydHMtd2l0aCIsICIka2V5IiwgIiJdLAp7InN1Y2Nlc3NfYWN0aW9uX3JlZGlyZWN0IjogImh0dHA6Ly9sb2NhbGhvc3Q6MzAwMC8ifSwKICAgIFsiY29udGVudC1sZW5ndGgtcmFuZ2UiLCAwLCAxMDQ4NTc2XQogIF0KfQo=" />
+			<input type="hidden" name="signature" value="9wzxK8533ENr7JjLk/YjBeueibg=" />
+			<table class = "table">
+				<tr>
+					<th>SELECT FILE</th>
+				</tr>
+				<tr>
+					<td>
+						<input name="file" type="file" />
+					</td>
+					<td>
+						<input class="btn btn-success"name="submit" value="UPLOAD TO S3" type="submit" />
+					</td>
+				</tr>
+			</table>
+		</form>
+</div>
+
+<div class= "panel panel-default">
+	<div class="panel-heading">Your File</div>
+		<table class = "table">
+			<% i = 1 %>
+			<tr>
+				<th>Name</th>
+				<th>Size</th>
+				<th>Last Modified</th>
+			</tr>
+			<% @objects.each_with_index do |object, index| %>
+				<tr>
+					<td> 
+						<% key = object.key %>
+						<% key.slice! current_user.folder+"/"  %>
+						<%= key %>
+					</td>
+					<td>
+						<%= @object_size[index] %>
+					</td>
+					<td>
+						<%= object.last_modified.asctime %>
+					</td>
+					<td>
+						<a class = "btn btn-primary" href=<%= @object_link[index] %>>DOWNLOAD</a>
+					</td>
+					<td>
+						<a class = "btn btn-info" style="color: white" href="">SHARE</a>
+					</td>
+				</tr>
+				<% i = i+1 %>
+			<% end %>
+		</table>
+</div>
+<%= @objects.length %> files
+
 <%= link_to 'Edit', edit_user_path(@user) %> |
 <%= link_to 'Back', users_path %>
