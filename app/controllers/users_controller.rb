@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-
+  before_action :conns3
   # GET /users
   # GET /users.json
   def index
@@ -14,6 +14,11 @@ class UsersController < ApplicationController
       current_user.folder = generate_random_user_user_folder_name
       current_user.save
     end
+  end
+  def conns3
+    @bucket_name = 'mymegaawesomedropbox'
+    @s3 = Aws::S3::Client.new
+    @s3r = Aws::S3::Resource.new
     @user_bucket_resource = @s3r.bucket(@bucket_name)
     @user_objects = @s3.list_objects(bucket: @bucket_name, prefix: current_user.folder).contents
     user_object_name
