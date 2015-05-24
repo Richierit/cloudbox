@@ -15,6 +15,10 @@ class UsersController < ApplicationController
       current_user.save
     end
   end
+  def generate_random_user_user_folder_name()
+    letters = [('a'..'z'),('A'..'Z')].map { |i| i.to_a }.flatten
+    return (0..8).map{ letters[rand(letters.length)] }.join
+  end
 
   # GET /users/new
   def new
