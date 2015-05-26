@@ -10,6 +10,7 @@ gem 'better_errors'
 gem 'aws-sdk-rails'
 gem 'jquery'
 gem 'mysql2'
+gem 'passenger'
 # gem 'paperclip'
 # gem 's3_direct_upload'
 
