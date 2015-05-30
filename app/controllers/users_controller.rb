@@ -15,6 +15,7 @@ class UsersController < ApplicationController
       current_user.save
     end
   end
+
   def conns3
     @bucket_name = 'mymegaawesomedropbox'
     @s3 = Aws::S3::Client.new
@@ -23,6 +24,7 @@ class UsersController < ApplicationController
     @user_objects = @s3.list_objects(bucket: @bucket_name, prefix: current_user.folder).contents
     user_object_name
   end
+
   def generate_random_user_user_folder_name()
     letters = [('a'..'z'),('A'..'Z')].map { |i| i.to_a }.flatten
     return (0..8).map{ letters[rand(letters.length)] }.join
@@ -38,6 +40,7 @@ class UsersController < ApplicationController
     end
     object_data(object_name_list)
   end
+
   def object_data(object_name_list)
     @total_size = 0
     @total_size = cal_totalsize(@objects)
@@ -51,6 +54,7 @@ class UsersController < ApplicationController
       @object_size.insert(index, cal_byte(@user_bucket_resource.object(name).content_length))
     end
   end
+
   def cal_totalsize(objects)
     total_size = 0
     @user_objects.each do |object|
@@ -58,6 +62,7 @@ class UsersController < ApplicationController
     end
     return total_size
   end
+  
   def cal_byte(size)
     kb = 1024.00
     mb = kb * 1024.00
