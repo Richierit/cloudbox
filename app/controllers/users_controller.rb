@@ -14,6 +14,8 @@ class UsersController < ApplicationController
       current_user.folder = generate_random_user_user_folder_name
       current_user.save
     end
+    userfile = Userfile.all
+    @files = userfile.where(user_id: current_user.id)
   end
   def conns3
     @bucket_name = 'mymegaawesomedropbox'
@@ -21,7 +23,9 @@ class UsersController < ApplicationController
     @s3r = Aws::S3::Resource.new
     @user_bucket_resource = @s3r.bucket(@bucket_name)
     @user_objects = @s3.list_objects(bucket: @bucket_name, prefix: current_user.folder).contents
-    user_object_name
+    if user_signed_in?
+      user_object_name
+    end
   end
   def generate_random_user_user_folder_name()
     letters = [('a'..'z'),('A'..'Z')].map { |i| i.to_a }.flatten
@@ -50,6 +54,17 @@ class UsersController < ApplicationController
       @object_link.insert(index, @user_bucket_resource.object(name).public_url)
       @object_size.insert(index, cal_byte(@user_bucket_resource.object(name).content_length))
     end
+    store_file(@object_link, @object_size)
+  end
+  def store_file(link, size)
+    @user_objects.each_with_index do |object, index|
+      key = object.key
+      key.slice! current_user.folder+"/"
+      @userfile = Userfile.new(name: key, link: link[index], size: size[index])
+      # @user.userfiles.create(name: name[index], link: link[index], size: size[index])
+      @userfile.user_id = current_user.id
+      @userfile.save
+    end
   end
   def cal_totalsize(objects)
     total_size = 0
@@ -76,7 +91,6 @@ class UsersController < ApplicationController
       return "#{size} mb"
     end
   end
-
 
 
   # GET /users/new
