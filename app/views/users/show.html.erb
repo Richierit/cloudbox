@@ -75,6 +75,32 @@
 			<% end %>
 		</table>
 </div>
+
+<div class= "panel panel-default">
+	<div class="panel-heading">Your File</div>
+		<table class = "table">
+			<tr>
+				<th>Name</th>
+			</tr>
+			
+			<tr>
+			<% @files.each do |f| %>
+			<td>
+				<%= f.name %>
+			</td>
+			<td>
+				<%= f.link %>
+			</td>
+			<td>
+				<%= f.size %>
+			</td>
+			</tr>
+			<% end %>	
+			
+		</table>
+</div>
+
+
 <%= @user_objects.length %> files
 
 <%= link_to 'Edit', edit_user_path(@user) %> |
