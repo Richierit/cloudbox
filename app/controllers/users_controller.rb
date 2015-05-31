@@ -63,14 +63,15 @@ class UsersController < ApplicationController
   end
   def store_file(link, size)
     if @user_objects.blank?   
-        @user_objects.each_with_index do |object, index|
+        
+    else
+      @user_objects.each_with_index do |object, index|
         key = object.key
         key.slice! current_user.folder+"/"
         @userfile = Userfile.new(name: key, link: link[index], size: size[index])
         @userfile.user_id = current_user.id
         @userfile.save
       end
-    else
     end
   end
 
