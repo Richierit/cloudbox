@@ -43,7 +43,7 @@
 </div>
 
 <div class= "panel panel-default">
-	<div class="panel-heading">Your File</div>
+	<div class="panel-heading">Your File(in S3)</div>
 		<table class = "table">
 			<% i = 1 %>
 			<tr>
@@ -68,7 +68,7 @@
 						<a class = "btn btn-primary" href=<%= @object_link[index] %>>DOWNLOAD</a>
 					</td>
 					<td>
-						<a class = "btn btn-info" style="color: white" href="">SHARE</a>
+						<!-- <a class = "btn btn-info" style="color: white" href="">SHARE</a> -->
 					</td>
 				</tr>
 				<% i = i+1 %>
@@ -77,25 +77,30 @@
 </div>
 
 <div class= "panel panel-default">
-	<div class="panel-heading">Your File</div>
+	<div class="panel-heading">Your File(in Database)</div>
 		<table class = "table">
 			<tr>
 				<th>Name</th>
+				<th>Size(in Byte)</th>
 			</tr>
-			
 			<tr>
 			<% @files.each do |f| %>
 			<td>
 				<%= f.name %>
 			</td>
 			<td>
-				<%= f.link %>
-			</td>
-			<td>
 				<%= f.size %>
 			</td>
+			<td>
+				<a class = "btn btn-primary" href=<%= f.link %>>DOWNLOAD</a>
+			</td>
+			<td>
+				<a class = "btn btn-info" href=<%= share_path(file_id: f.id, sharer: current_user.email) %>>Share</a>
+			</td>
 			</tr>
-			<% end %>	
+			<% end %>
+			
+
 			
 		</table>
 </div>
@@ -104,27 +109,60 @@
 	<div class="panel-heading">Shared to you</div>
 		<table class = "table">
 			<tr>
-				<th>Name</th>
-				<th>Size</th>
+				<th>File_id</th>
 				<th>Link</th>
+				<th>Size(in Byte)</th>
+				<th>Owner</th>
 			</tr>
 			
 			<tr>
-			<% @files.each do |f| %>
+			<% @permission_recieved.each do |f| %>
 			<td>
-				<%= f.name %>
+				<% this_file = Userfile.where(id: f.file_id)%>
+				<%= this_file[0].name %>
 			</td>
 			<td>
-				<%= f.size %>
+				<a class = "btn btn-primary" href=<%= this_file[0].link %>>DOWNLOAD</a>
 			</td>
 			<td>
-				<%= f.link %>
+				<%= this_file[0].size %>
+			</td>
+			<td>
+				<%= f.sharer %>
 			</td>
 			</tr>
 			<% end %>	
-			
 		</table>
 </div>
+<div class= "panel panel-default">
+	<div class="panel-heading">Files that you shared</div>
+		<table class = "table">
+			<tr>
+				<th>File_id</th>
+				<th>Shared to</th>
+				<th>Size(in Byte)</th>
+				<th>Link</th>
+			</tr>
+			<tr>
+			<% @permission_given.each do |f| %>
+			<td>
+				<% this_file = Userfile.where(id: f.file_id)%>
+				<%= this_file[0].name %>
+			</td>
+			<td>
+				<%= f.sharedto %>
+			</td>
+			<td>
+				<%= this_file[0].size %>
+			</td>
+			<td>
+				<a class = "btn btn-primary" href=<%= this_file[0].link %>>DOWNLOAD</a>
+			</td>
+			</tr>
+			<% end %>	
+		</table>
+</div>
+
 
 
 <%= @user_objects.length %> files

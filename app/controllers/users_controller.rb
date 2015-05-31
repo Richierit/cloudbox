@@ -16,6 +16,8 @@ class UsersController < ApplicationController
     end
     userfile = Userfile.all
     @files = userfile.where(user_id: current_user.id)
+    @permission_recieved = Permission.where(sharedto: current_user.email)
+    @permission_given = Permission.where(sharer: current_user.email)
   end
 
   def conns3
@@ -60,13 +62,15 @@ class UsersController < ApplicationController
     store_file(@object_link, @object_size)
   end
   def store_file(link, size)
-    @user_objects.each_with_index do |object, index|
-      key = object.key
-      key.slice! current_user.folder+"/"
-      @userfile = Userfile.new(name: key, link: link[index], size: size[index])
-      # @user.userfiles.create(name: name[index], link: link[index], size: size[index])
-      @userfile.user_id = current_user.id
-      @userfile.save
+    if @user_objects.blank?   
+        @user_objects.each_with_index do |object, index|
+        key = object.key
+        key.slice! current_user.folder+"/"
+        @userfile = Userfile.new(name: key, link: link[index], size: size[index])
+        @userfile.user_id = current_user.id
+        @userfile.save
+      end
+    else
     end
   end
 

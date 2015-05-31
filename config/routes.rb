@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   resources :users
+  resources :permissions
   get 'static_pages/home' => 'static_pages#home'
   root 'static_pages#home'
   # devise_for :users
@@ -8,6 +9,10 @@ Rails.application.routes.draw do
 
   get 'user' => 'user#index'
   get 'new_user' => 'user#new'
+
+  get 'permissions/share' => 'permissions#share'
+  get 'share' => 'permissions#share'
+  match 'permissions/share', to: 'permissions#create', via: [:post]
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

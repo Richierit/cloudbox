@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   
 	before_action :conns3
 
+
+
 	def home
 	end
 	def conns3
