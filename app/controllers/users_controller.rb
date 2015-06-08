@@ -18,7 +18,7 @@ class UsersController < ApplicationController
   end
 
   def conns3
-    @bucket_name = 'mymegaawesomedropbox'
+    @bucket_name = 'bucket_name'
     @s3 = Aws::S3::Client.new
     @s3r = Aws::S3::Resource.new
     @user_bucket_resource = @s3r.bucket(@bucket_name)

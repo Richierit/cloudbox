@@ -7,10 +7,10 @@ development:
 
 production:
   adapter: mysql2
-  database: cloudserver
-  username: admin
-  host: cloudserver.csmtof4sowot.ap-southeast-1.rds.amazonaws.com
-  password: mypassword
+  database: <database-name>
+  username: <username>
+  host: <rds url>
+  password: <password>
   port: 3306
   pool: 5
   timeout: 5000
